@@ -1,0 +1,158 @@
+
+
+
+sudo apt-get update
+
+
+sudo apt-get install mariadb-server mariadb-client
+
+
+
+#After installing, the commands below can be used to stop, restart, start and enable MariaDB service to always start up when the server boots.
+
+sudo systemctl stop mariadb.service
+sudo systemctl restart mariadb.service
+sudo systemctl start mariadb.service
+sudo systemctl enable mariadb.service
+
+
+
+
+sudo mysql_secure_installation
+
+
+#When prompted, answer the questions below by following the guide.
+
+#Enter current password for root (enter for none): Just press the Enter
+
+
+
+#Set root password? [Y/n]: Y
+#New password: Enter password
+#Re-enter new password: Repeat password
+#Remove anonymous users? [Y/n]: Y
+#Disallow root login remotely? [Y/n]: Y
+#Remove test database and access to it? [Y/n]: Y
+#Reload privilege tables now? [Y/n]: Y
+#Restart MariaDB server when done.
+
+
+sudo systemctl restart mariadb.service
+
+
+#To verify MariaDB version, run the command below:
+
+mysql --version
+
+
+#output
+#mysql  Ver 15.1 Distrib 10.1.29-MariaDB, for debian-linux-gnu (x86_64) using readline 5.2
+
+
+########################## To configure the port and other things#33####################
+
+
+
+
+sudo vim  /etc/mysql/mariadb.conf.d/50-server.cnf
+
+
+###################  Pres Esc  then   :wq   ############  to save the  file
+
+
+  ################# Log in to DB
+
+
+
+sudo mysqladmin -u root version
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#######################################  3) 
+
+######################################################             Working on DB                                  ######################
+
+Showing all databases
+To show all the databases that your MariaDB currently has, run command below:
+
+MariaDB [()]> show databases;
+4) Creating new databases
+To create a new database in mariadb, run command below:
+
+MariaDB [()]> CREATE DATABASE store;
+Here, store is the name of the new database.
+
+5) Deleting a database
+To delete a database, run command below:
+
+MariaDB [()]> DROP DATABASE store;
+6) Creating new user
+To create a new user for database, run command below:
+
+MariaDB [()]> CREATE USER 'testuser'@'localhost' IDENTIFIED BY 'pass123';
+7) Granting access to user for a database
+For providing access to testuser for a single database, run command below:
+
+MariaDB [()]> GRANT ALL PRIVILEGES ON store.* to 'testuser'@'localhost';
+This will provide user testuser complete access over database named store. We can also grant SELECT, INSERT , DELETE permissions to testuser.
+To provide access to all databases, replace store with * i.e.
+
+MariaDB [()]> GRANT ALL PRIVILEGES ON *.* to 'testuser'@'localhost';
+8) Creating backup/dump of database
+Frist type quit to exit from mariadb.
+To create of a single database, run the following command from your terminal window,
+
+$ sudo mysqldump store > db_backup.sql
+To create backup of multiple databases in single command,
+
+$ mysqldump --databases database_one database_two > two_databases.sql
+In the code above, database_one is the name of the first database to be backed up, and database_two is the name of the second.
+To create dump of all databases in single command,
+
+$ sudo mysqldump --all-databases > all_databases.sql
+In the code above will back up all of the databases on a server.
+
+9) Restoring database from the dump
+To restore database from a dump, run
+
+$ sudo mysql store < db_backup.sql
+In the code above, store is the name of the database you want to restore, and db_backup.sql is the name of the backup file to be restored.
+If you are trying to restore a single database from dump of all the databases, you have to let mysql know like this:
+
+mysql --one-database store < all_databases.sql
+10) Changing password for a user in MariaDB
+if you wanted to update the user named testuser with the password 'newpassword', you would run the following SET PASSWORD statement in MariaDB:
+
+$ mysql -u root -p
+MariaDB [()]> SET PASSWORD FOR 'testuser'@'localhost' = PASSWORD('newpassword');
+and then exit the session by hit Ctrl+d.
+In the end run command below:
+
+$ sudo systemctl restart mariadb.service  ############################
+
+
+
+
+
+
+
